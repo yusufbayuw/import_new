@@ -32,7 +32,17 @@
     </header>
     <main>
       <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-        @livewire('mutasi-baru')
+@if ($aktif)
+@livewire('mutasi-baru')
+@else
+<h1 class="text-2xl font-bold text-red-900">Form Inhealth Sedang Ditutup</h1>
+<h2 class="text-xl text-gray-900">Silakan menghubungi administrator.</h2>
+<script>
+        setTimeout(function() {
+            window.location.href = "https://tarunabakti.or.id";
+        }, 5000);
+    </script>
+@endif
       </div>
     </main>
   </div>

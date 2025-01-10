@@ -120,8 +120,17 @@ class MutasiPesertaBaruResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->columns([
-                
+            ->columns([            
+                TextColumn::make('no')->getStateUsing(
+                    static function (stdClass $rowLoop, HasTable $livewire): string {
+                        return (string) (
+                            $rowLoop->iteration +
+                            ($livewire->tableRecordsPerPage * (
+                                $livewire->page - 1
+                            ))
+                        );
+                    }
+                ),    
                 TextColumn::make('produk_yg_dipilih')->sortable(),
                 TextColumn::make('kelas_rawat')->sortable(),
                 TextColumn::make('no_peg')->searchable()->sortable(),
@@ -144,7 +153,13 @@ class MutasiPesertaBaruResource extends Resource
                 TextColumn::make('tgl_efektif_bpjs')->sortable(),
                 TextColumn::make('no_telepon'),
                 TextColumn::make('nomor_induk_kependudukan')->sortable(),
-                TextColumn::make('tmt'),
+                TextColumn::make('tmt')->formatStateUsing(function ($record, $state) {
+                    if (isset($state)) {
+                        return $state;
+                    } else {
+                        return date('01/m/Y', strtotime('+1 month', strtotime($record->created_at)));
+                    }
+                }),
                 TextColumn::make('nama_bank')->sortable(),
                 TextColumn::make('no_rek'),
                 TextColumn::make('nama_pemilik_rekening')->sortable(),
