@@ -51,7 +51,7 @@ class MutasiBaru extends Component implements HasForms
                                 return function (string $attribute, $value, Closure $fail) {
                                     if (!(Pegawai::where('nip', $value)->first()->is_tetap ?? 0)) {
                                         if (MutasiPesertaBaru::where('no_peg', $value)->exists()) {
-                                            $fail('Kuota Inhealth untuk NIP :value terbatas 1 orang (pegawai saja).');
+                                            $fail("Kuota Inhealth untuk NIP {$value} terbatas 1 orang (pegawai saja).");
                                         }
                                     }
                                 };
