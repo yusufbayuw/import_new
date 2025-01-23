@@ -50,7 +50,7 @@ class MutasiBaru extends Component implements HasForms
                             function () {
                                 return function (string $attribute, $value, Closure $fail) {
                                     if (!(Pegawai::where('nip', $value)->first()->is_tetap ?? 0)) {
-                                        if (MutasiPesertaBaru::where('no_peg',$value)->exists()) {
+                                        if (MutasiPesertaBaru::where('no_peg', $value)->exists()) {
                                             $fail('Kuota Inhealth untuk :attribute terbatas 1 orang.');
                                         }
                                     }
@@ -74,7 +74,7 @@ class MutasiBaru extends Component implements HasForms
                     Select::make('nama_bank')->options(KodeBank::all()->pluck('nama_bank', 'nama_bank'))->searchable()->preload()->label('Nama Bank yang Digunakan')
                         ->reactive()
                         ->required()
-                        ->afterStateUpdated(fn (Closure $set, $state) => $set('kode_bank', KodeBank::where('nama_bank', $state)->first()->kode_bank ?? null )),
+                        ->afterStateUpdated(fn(Closure $set, $state) => $state ? $set('kode_bank', KodeBank::where('nama_bank', $state)->first()->kode_bank ?? null) : null),
                     Hidden::make('kode_bank'),
                     TextInput::make('no_rek')->numeric()->label('Nomor Rekening Bank')->required(),
                     TextInput::make('nama_pemilik_rekening')->label('Nama Pemilik Rekening')->extraInputAttributes(['onChange' => 'this.value = this.value.toUpperCase()'])->dehydrateStateUsing(fn($state) => strtoupper($state))->required(),
@@ -83,9 +83,18 @@ class MutasiBaru extends Component implements HasForms
                 ->schema([
                     Select::make('produk_yg_dipilih')->options(Produk::all()->pluck('nama', 'kode'))->label('Produk Inhealth')->required(),
                     Select::make('kelas_rawat')->options(KelasRawat::all()->pluck('nama', 'kode'))->default('3')->disabled()->label('Kelas Rawat Inap Inhealth'),
-                    Select::make('kode_dokter')->searchable()->getSearchResultsUsing(fn(string $search) => ProviderInhealth::where('address_virt', 'like', "%{$search}%")->limit(100)->pluck('address_virt', 'kode_provider'))->getOptionLabelUsing(fn($value): ?string => ProviderInhealth::where('kode_provider', $value)->get('nama_provider')->nama_provider)->afterStateUpdated(function (Closure $set, $state) {
-                        $set('nama_dokter', ProviderInhealth::where('kode_provider', $state)->get('nama_provider')[0]->nama_provider);
-                    })->reactive()->label('Tentukan Fasilitas Kesehatan Inhealth')->helperText('Ketik untuk mencari, kemudian pilih.')->required(),
+                    Select::make('kode_dokter')
+                        ->searchable()
+                        ->getSearchResultsUsing(fn(string $search) => ProviderInhealth::where('address_virt', 'like', "%{$search}%")->limit(100)->pluck('address_virt', 'kode_provider'))
+                        ->getOptionLabelUsing(fn($value): ?string => ProviderInhealth::where('kode_provider', $value)->get('nama_provider')->nama_provider)
+                        ->afterStateUpdated(function (Closure $set, $state) {
+                            if ($state) {
+                                $set('nama_dokter', ProviderInhealth::where('kode_provider', $state)->get('nama_provider')[0]->nama_provider);
+                            }
+                        })->reactive()
+                        ->label('Tentukan Fasilitas Kesehatan Inhealth')
+                        ->helperText('Ketik untuk mencari, kemudian pilih.')
+                        ->required(),
                     TextInput::make('nama_dokter')->disabled()->extraInputAttributes(['onChange' => 'this.value = this.value.toUpperCase()'])->dehydrateStateUsing(fn($state) => strtoupper($state))->label('Nama Fakes Dipilih'),
                 ]),
             Section::make('BPJS')
