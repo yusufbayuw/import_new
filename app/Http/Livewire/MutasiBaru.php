@@ -74,7 +74,13 @@ class MutasiBaru extends Component implements HasForms
                     Select::make('nama_bank')->options(KodeBank::all()->pluck('nama_bank', 'nama_bank'))->searchable()->preload()->label('Nama Bank yang Digunakan')
                         ->reactive()
                         ->required()
-                        ->afterStateUpdated(fn(Closure $set, $state) => $state ? $set('kode_bank', KodeBank::where('nama_bank', $state)->first()->kode_bank ?? null) : $set('kode_bank', null)),
+                        ->afterStateUpdated(function (Closure $set, $state) {
+                            if ($state) {
+                                $set('kode_bank', KodeBank::where('nama_bank', $state)->first()->kode_bank ?? null);
+                            } else {
+                                $set('kode_bank', null);
+                            }
+                        }),
                     Hidden::make('kode_bank'),
                     TextInput::make('no_rek')->numeric()->label('Nomor Rekening Bank')->required(),
                     TextInput::make('nama_pemilik_rekening')->label('Nama Pemilik Rekening')->extraInputAttributes(['onChange' => 'this.value = this.value.toUpperCase()'])->dehydrateStateUsing(fn($state) => strtoupper($state))->required(),
