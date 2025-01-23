@@ -57,11 +57,11 @@ class SettingResource extends Resource
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
-    
+
     public static function getPages(): array
     {
         return [
             'index' => Pages\ManageSettings::route('/'),
         ];
-    }    
+    }
 }

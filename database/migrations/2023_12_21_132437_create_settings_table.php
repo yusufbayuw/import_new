@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
-	    $table->string('nama');
-	    $table->boolean('status');
-	    $table->string('keterangan')->nullable();
+            $table->string('nama');
+            $table->boolean('status');
+            $table->string('keterangan')->nullable();
             $table->timestamps();
         });
     }

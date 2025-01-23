@@ -47,7 +47,7 @@ class MutasiPesertaBaruResource extends Resource
     protected static ?string $navigationLabel = 'Mutasi Peserta Baru';
 
     protected static ?string $navigationGroup = 'Peserta';
-    
+
     protected function paginateTableQuery(Builder $query): Paginator
     {
         return $query->fastPaginate($this->getTableRecordsPerPage());
@@ -93,7 +93,7 @@ class MutasiPesertaBaruResource extends Resource
                                 ->options(ProviderInhealth::all()->pluck('address_virt', 'kode_provider'))
                                 ->afterStateUpdated(function (Closure $set, $state) {$set('nama_dokter', ProviderInhealth::where('kode_provider', $state)->get('nama_provider')[0]->nama_provider);})->reactive()
                                 ->label('Tentukan Fasilitas Kesehatan Inhealth')
-                                ->helperText('Ketik untuk mencari, kemudian pilih.'), 
+                                ->helperText('Ketik untuk mencari, kemudian pilih.'),
                             TextInput::make('nama_dokter')->disabled()->extraInputAttributes(['onChange' => 'this.value = this.value.toUpperCase()'])->dehydrateStateUsing(fn ($state) => strtoupper($state))->label('Nama Fakes Dipilih'),
                     ]),
                 Section::make('BPJS')
@@ -111,7 +111,7 @@ class MutasiPesertaBaruResource extends Resource
                             ->afterStateUpdated(function (Closure $set, $state) {$set('nama_fakes', ProviderBPJS::where('kode_ppk_bpjs', $state)->get('nama_ppk_bpjs')[0]->nama_ppk_bpjs);})
                             ->reactive()
                             ->label('Fasilitas Kesehatan BPJS')
-                            ->helperText('Ketik untuk mencari, kemudian pilih.'), 
+                            ->helperText('Ketik untuk mencari, kemudian pilih.'),
                         TextInput::make('nama_fakes')->disabled()->extraInputAttributes(['onChange' => 'this.value = this.value.toUpperCase()'])->dehydrateStateUsing(fn ($state) => strtoupper($state))->label('Nama Fasilitas Kesehatan BPJS'),
                     ]),
             ]);
@@ -120,7 +120,7 @@ class MutasiPesertaBaruResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->columns([            
+            ->columns([
                 TextColumn::make('no')->getStateUsing(
                     static function (stdClass $rowLoop, HasTable $livewire): string {
                         return (string) (
@@ -130,7 +130,7 @@ class MutasiPesertaBaruResource extends Resource
                             ))
                         );
                     }
-                ),    
+                ),
                 TextColumn::make('produk_yg_dipilih')->sortable(),
                 TextColumn::make('kelas_rawat')->sortable(),
                 TextColumn::make('no_peg')->searchable()->sortable(),
@@ -193,11 +193,11 @@ class MutasiPesertaBaruResource extends Resource
                     ->defaultPageOrientation('landscape'),
             ]);
     }
-    
+
     public static function getPages(): array
     {
         return [
             'index' => Pages\ManageMutasiPesertaBarus::route('/'),
         ];
-    }    
+    }
 }
