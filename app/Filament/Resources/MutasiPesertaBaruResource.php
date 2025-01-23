@@ -31,6 +31,7 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\MutasiPesertaBaruResource\Pages;
 use AlperenErsoy\FilamentExport\Actions\FilamentExportBulkAction;
 use AlperenErsoy\FilamentExport\Actions\FilamentExportHeaderAction;
+use App\Models\Jabatan;
 
 class MutasiPesertaBaruResource extends Resource
 {
@@ -68,6 +69,7 @@ class MutasiPesertaBaruResource extends Resource
                             TextInput::make('email')->email()->required(),
                             TextInput::make('nomor_induk_kependudukan')->label('Nomor Induk Kependudukan (NIK)')->numeric()->length(16)->required(),
                             TextInput::make('no_peg')->label('Nomor Induk Pegawai (NIP)'),
+                            Select::make('jabatan')->options(Jabatan::all()->pluck('nama', 'kode'))->searchable()->label('Jabatan')->preload(),
                             TextInput::make('no_telepon')->label('Nomor Telepon')->numeric(),
                             Hidden::make('sub_group')->default(''),
                             Hidden::make('nama_subgroup')->default(''),
@@ -81,7 +83,10 @@ class MutasiPesertaBaruResource extends Resource
                             Select::make('status_kawin')->options(StatusKawin::all()->pluck('nama', 'kode'))->label('Status Perkawinan'),
                             TextInput::make('alamat')->label('Alamat Lengkap')->extraInputAttributes(['onChange' => 'this.value = this.value.toUpperCase()'])->dehydrateStateUsing(fn ($state) => strtoupper($state)),
                             Select::make('kode_kecamatan')->options(KodeKecamatan::all()->pluck('nama_kecamatan', 'kode_kecamatan'))->searchable()->label('Nama Kecamatan'),
-                            Select::make('nama_bank')->options(KodeBank::all()->pluck('nama_bank', 'kode_bank'))->searchable()->preload()->label('Nama Bank yang Digunakan'),
+                            Select::make('nama_bank')->options(KodeBank::all()->pluck('nama_bank', 'kode_bank'))->searchable()->preload()->label('Nama Bank yang Digunakan')
+                                ->reactive()
+                                ->afterStateUpdated(fn (Closure $set, $state) => $set('kode_bank', KodeBank::where('nama', $state)->first()->kode ?? null )),
+                            Hidden::make('kode_bank'),
                             TextInput::make('no_rek')->numeric()->label('Nomor Rekening Bank'),
                             TextInput::make('nama_pemilik_rekening')->label('Nama Pemilik Rekening')->extraInputAttributes(['onChange' => 'this.value = this.value.toUpperCase()'])->dehydrateStateUsing(fn ($state) => strtoupper($state)),
                     ]),
@@ -130,42 +135,103 @@ class MutasiPesertaBaruResource extends Resource
                             ))
                         );
                     }
-                )->label("NO URUT*"),
+                )->label("NO URUT *"),
                 TextColumn::make('kelas_rawat')->sortable()
                     ->label("KELAS RAWAT"),
                 TextColumn::make('produk_yg_dipilih')->sortable()
                     ->label('PRODUK YG DIPILIH'),
-                TextColumn::make('no_peg')->searchable()->sortable(),
-                TextColumn::make('sub_group'),
-                TextColumn::make('nama_subgroup'),
-                TextColumn::make('nama')->searchable()->sortable(),
-                TextColumn::make('pisa')->sortable(),
-                TextColumn::make('tempat_lhr')->sortable(),
-                TextColumn::make('tgl_lhr')->formatStateUsing(fn ($state) => date('d/m/Y', strtotime($state))),
-                TextColumn::make('jns_kel')->sortable(),
-                TextColumn::make('status_kawin')->sortable(),
-                TextColumn::make('alamat')->searchable()->sortable(),
-                TextColumn::make('kode_kecamatan')->sortable(),
-                TextColumn::make('kode_dokter')->sortable(),
-                TextColumn::make('nama_dokter')->searchable()->sortable(),
-                TextColumn::make('nomor_kartu'),
-                TextColumn::make('kode_fakes')->sortable(),
-                TextColumn::make('nama_fakes')->searchable()->sortable(),
-                TextColumn::make('kelas_rawat_bpjs')->sortable(),
-                TextColumn::make('tgl_efektif_bpjs')->sortable(),
+                TextColumn::make('no_peg')
+                    ->searchable()
+                    ->sortable()
+                    ->label('NO PEG *'),
+                TextColumn::make('sub_group')
+                    ->label('SUB GOUP*'),
+                //TextColumn::make('nama_subgroup'),
+                TextColumn::make('nama')->searchable()->sortable()
+                    ->label('NAMA *'),
+                TextColumn::make('pisa')
+                    ->sortable()
+                    ->label('PISA *'),
+                TextColumn::make('tempat_lhr')
+                    ->sortable()
+                    ->label('TEMPAT LHR'),
+                TextColumn::make('tgl_lhr')
+                    ->formatStateUsing(fn ($state) => date('d/m/Y', strtotime($state)))
+                    ->label('TGL LHR *'),
+                TextColumn::make('jns_kel')
+                    ->sortable()
+                    ->label('JNS KEL *'),
+                TextColumn::make('status_kawin')
+                    ->sortable()
+                    ->label('STATUS KAWIN *'),
+                TextColumn::make('alamat')
+                    ->searchable()
+                    ->sortable()
+                    ->label('ALAMAT JALAN'),
+                TextColumn::make('kode_kecamatan')
+                    ->sortable()
+                    ->label('KODE KECAMATAN *'),
+                TextColumn::make('kode_dokter')
+                    ->sortable('KODE DOKTER'),
+                TextColumn::make('nama_dokter')
+                    ->searchable()
+                    ->sortable()
+                    ->label('NAMA DOKTER'),
+                TextColumn::make('nomor_kartu')
+                    ->label('NOMOR KARTU'),
+                TextColumn::make('kode_fakes')
+                    ->sortable()
+                    ->label('KODE FAKES'),
+                /* TextColumn::make('nama_fakes')
+                    ->searchable()
+                    ->sortable()
+                    ->label('NAMA RAWAT'), */
+                TextColumn::make('kelas_rawat_bpjs')
+                    ->sortable()
+                    ->label('KELAS RAWAT'),
+                TextColumn::make('tgl_efektif_bpjs')
+                    ->sortable()
+                    ->label('TGL EFEKTIF'),
                 TextColumn::make('no_telepon'),
-                TextColumn::make('nomor_induk_kependudukan')->sortable(),
+                TextColumn::make('nomor_induk_kependudukan')
+                    ->sortable()
+                    ->label('NIK *'),
                 TextColumn::make('tmt')->formatStateUsing(function ($record, $state) {
                     if (isset($state)) {
                         return $state;
                     } else {
                         return date('01/m/Y', strtotime('+1 month', strtotime($record->created_at)));
                     }
-                }),
-                TextColumn::make('nama_bank')->sortable(),
-                TextColumn::make('no_rek'),
-                TextColumn::make('nama_pemilik_rekening')->sortable(),
-                TextColumn::make('email')->sortable(),
+                })
+                    ->label('TMT *'),
+                TextColumn::make('jabatan')
+                    ->label('JABATAN *'),
+                TextColumn::make('gaji')
+                    ->label('GAJI'),
+                TextColumn::make('nama_bank')
+                    ->sortable()
+                    ->label('NAMA BANK'),
+                TextColumn::make('no_rek')
+                    ->label('NO REK *'),
+                TextColumn::make('nama_pemilik_rekening')
+                    ->sortable()
+                    ->label('NAMA PEMILIK REK'),
+                TextColumn::make('kode_divisi_eksternal')
+                    ->label('KODE DIVISI EKSTERNAL'),
+                TextColumn::make('cost_center')
+                    ->label('COST CENTER'),
+                TextColumn::make('email')->sortable()
+                    ->label('EMAIL *'),
+                TextColumn::make('benefit')
+                    ->label('BENEFIT'),
+                TextColumn::make('kode_bank')
+                    ->label('KODE BANK *'),
+                TextColumn::make('direktorat')
+                    ->label('DIREKTORAT'),
+                TextColumn::make('nama_cabang')
+                    ->label('NAMA CABANG'),
+                TextColumn::make('no_telepon')
+                    ->label('NO TELP'),
                 /* TextColumn::make('created_at')
                     ->dateTime()->toggleable(isToggledHiddenByDefault: true)->sortable(),
                 TextColumn::make('updated_at')
