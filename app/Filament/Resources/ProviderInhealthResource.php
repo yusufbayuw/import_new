@@ -58,7 +58,7 @@ class ProviderInhealthResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('kode_provider')->sortable(),
+                Tables\Columns\TextColumn::make('kode_provider')->searchable()->sortable(),
                 Tables\Columns\TextColumn::make('nama_provider')->searchable()->sortable(),
                 Tables\Columns\TextColumn::make('alamat')->searchable()->sortable(),
                 Tables\Columns\TextColumn::make('kantor_operasional')->searchable()->sortable(),
