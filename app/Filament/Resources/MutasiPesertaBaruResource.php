@@ -116,8 +116,7 @@ class MutasiPesertaBaruResource extends Resource
                         Select::make('kelas_rawat')->options(KelasRawat::all()->pluck('nama', 'kode'))->default('3')->disabled()->label('Kelas Rawat Inap Inhealth'),
                         Select::make('kode_dokter')
                             ->searchable()
-                            ->getSearchResultsUsing(fn(string $search) => ProviderInhealth::where('address_virt', 'like', "%{$search}%")->limit(100)->pluck('address_virt', 'kode_provider'))
-                            ->getOptionLabelUsing(fn($value): ?string => ProviderInhealth::where('kode_provider', $value)->get('nama_provider')->nama_provider)
+                            ->options(ProviderInhealth::all()->pluck('nama_provider', 'kode_provider'))
                             ->afterStateUpdated(function (Closure $set, $state) {
                                 if ($state) {
                                     $set('nama_dokter', ProviderInhealth::where('kode_provider', $state)->get('nama_provider')[0]->nama_provider);
@@ -142,8 +141,7 @@ class MutasiPesertaBaruResource extends Resource
                         Hidden::make('tmt')->default(date('01/m/Y', strtotime('+1 month'))),
                         Select::make('kode_fakes')
                             ->searchable()
-                            ->getSearchResultsUsing(fn(string $search) => ProviderBPJS::where('address_virt', 'like', "%{$search}%")->limit(100)->pluck('address_virt', 'kode_ppk_bpjs'))
-                            ->getOptionLabelUsing(fn($value): ?string => ProviderBPJS::where('kode_ppk_bpjs', $value)->get('nama_ppk_bpjs')->nama_ppk_bpjs)
+                            ->options(ProviderBPJS::all()->pluck('nama_ppk_bpjs','kode_ppk_bpjs'))
                             ->afterStateUpdated(function (Closure $set, $state) {
                                 if ($state) {
                                     $set('nama_fakes', ProviderBPJS::where('kode_ppk_bpjs', $state)->get('nama_ppk_bpjs')[0]->nama_ppk_bpjs);
