@@ -185,7 +185,8 @@ class MutasiPesertaBaruResource extends Resource
                     ->sortable()
                     ->label('KODE KECAMATAN *'),
                 TextColumn::make('kode_dokter')
-                    ->sortable('KODE DOKTER'),
+                    ->sortable()
+                    ->label('KODE DOKTER'),
                 TextColumn::make('nama_dokter')
                     ->searchable()
                     ->sortable()
