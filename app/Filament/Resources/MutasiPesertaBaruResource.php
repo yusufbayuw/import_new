@@ -8,6 +8,7 @@ use Filament\Forms;
 use App\Models\Pisa;
 use Filament\Tables;
 use App\Models\Produk;
+use App\Models\Jabatan;
 use App\Models\KodeBank;
 use App\Models\KelasRawat;
 use App\Models\StatusKawin;
@@ -25,13 +26,14 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
+use Illuminate\Validation\Rules\Unique;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\MutasiPesertaBaruResource\Pages;
 use AlperenErsoy\FilamentExport\Actions\FilamentExportBulkAction;
 use AlperenErsoy\FilamentExport\Actions\FilamentExportHeaderAction;
-use App\Models\Jabatan;
+use App\Models\Pegawai;
 
 class MutasiPesertaBaruResource extends Resource
 {
@@ -68,7 +70,10 @@ class MutasiPesertaBaruResource extends Resource
                             TextInput::make('nama')->label('Nama')->required()->extraInputAttributes(['onChange' => 'this.value = this.value.toUpperCase()'])->dehydrateStateUsing(fn ($state) => strtoupper($state)),
                             TextInput::make('email')->email()->required(),
                             TextInput::make('nomor_induk_kependudukan')->label('Nomor Induk Kependudukan (NIK)')->numeric()->length(16)->required(),
-                            TextInput::make('no_peg')->label('Nomor Induk Pegawai (NIP)'),
+                            TextInput::make('no_peg')->label('Nomor Induk Pegawai (NIP)')
+                                ->unique(callback: function ($state) {
+                                    return (Pegawai::where('nip', $state)->first()->is_tetap ?? 0);
+                                }),
                             Select::make('jabatan')->options(Jabatan::all()->pluck('nama', 'kode'))->searchable()->label('Jabatan')->preload(),
                             TextInput::make('no_telepon')->label('Nomor Telepon')->numeric(),
                             Hidden::make('sub_group')->default(''),

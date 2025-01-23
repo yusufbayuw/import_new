@@ -6,6 +6,7 @@ use Closure;
 use App\Models\Pisa;
 use App\Models\Produk;
 use App\Models\Jabatan;
+use App\Models\Pegawai;
 use Livewire\Component;
 use App\Models\KodeBank;
 use App\Models\KelasRawat;
@@ -43,7 +44,10 @@ class MutasiBaru extends Component implements HasForms
                     TextInput::make('nama')->label('Nama')->required()->extraInputAttributes(['onChange' => 'this.value = this.value.toUpperCase()'])->dehydrateStateUsing(fn($state) => strtoupper($state)),
                     TextInput::make('email')->email()->required(),
                     TextInput::make('nomor_induk_kependudukan')->label('Nomor Induk Kependudukan (NIK)')->numeric()->length(16)->required(),
-                    TextInput::make('no_peg')->label('Nomor Induk Pegawai (NIP)'),
+                    TextInput::make('no_peg')->label('Nomor Induk Pegawai (NIP)')
+                        ->unique(callback: function ($state) {
+                            return (Pegawai::where('nip', $state)->first()->is_tetap ?? 0);
+                        }),
                     Select::make('jabatan')->options(Jabatan::all()->pluck('nama', 'kode'))->searchable()->label('Jabatan')->preload(),
                     TextInput::make('no_telepon')->label('Nomor Telepon')->numeric(),
                     Hidden::make('sub_group')->default(''),
