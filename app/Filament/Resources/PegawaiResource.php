@@ -19,13 +19,13 @@ class PegawaiResource extends Resource
 
     protected static ?int $navigationSort = 10;
 
-    protected static ?string $modelLabel = 'Data Keluarga';
+    protected static ?string $modelLabel = 'Data Pegawai';
 
     protected static ?string $navigationIcon = 'heroicon-o-user-circle';
 
-    protected static ?string $slug = 'pisa';
+    protected static ?string $slug = 'pegawai';
 
-    protected static ?string $navigationLabel = 'Data Keluarga';
+    protected static ?string $navigationLabel = 'Data Pegawai';
 
     protected static ?string $navigationGroup = 'Data List';
 

@@ -45,21 +45,22 @@ class MutasiBaru extends Component implements HasForms
                     TextInput::make('email')->email()->required(),
                     TextInput::make('nomor_induk_kependudukan')->label('Nomor Induk Kependudukan (NIK)')->numeric()->length(16)->required(),
                     TextInput::make('no_peg')->label('Nomor Induk Pegawai (NIP)')
+                        ->required()
                         ->unique(callback: function ($state) {
                             return (Pegawai::where('nip', $state)->first()->is_tetap ?? 0);
                         }),
                     Select::make('jabatan')->options(Jabatan::all()->pluck('nama', 'kode'))->searchable()->label('Jabatan')->preload(),
-                    TextInput::make('no_telepon')->label('Nomor Telepon')->numeric(),
+                    TextInput::make('no_telepon')->label('Nomor Telepon')->numeric()->required(),
                     Hidden::make('sub_group')->default(''),
                     Hidden::make('nama_subgroup')->default(''),
-                    TextInput::make('tempat_lhr')->label('Tempat Kelahiran')->extraInputAttributes(['onChange' => 'this.value = this.value.toUpperCase()'])->dehydrateStateUsing(fn($state) => strtoupper($state)),
-                    DatePicker::make('tgl_lhr')->label('Tanggal Lahir'),
+                    TextInput::make('tempat_lhr')->label('Tempat Kelahiran')->extraInputAttributes(['onChange' => 'this.value = this.value.toUpperCase()'])->dehydrateStateUsing(fn($state) => strtoupper($state))->required(),
+                    DatePicker::make('tgl_lhr')->label('Tanggal Lahir')->required(),
                     Select::make('jns_kel')->options(JenisKelamin::all()->pluck('nama', 'kode'))->label('Jenis Kelamin'),
                 ]),
             Section::make('Status')
                 ->schema([
-                    Select::make('pisa')->options(Pisa::all()->pluck('nama', 'kode'))->label('Status di Kartu Keluarga'),
-                    Select::make('status_kawin')->options(StatusKawin::all()->pluck('nama', 'kode'))->label('Status Perkawinan'),
+                    Select::make('pisa')->options(Pisa::all()->pluck('nama', 'kode'))->label('Status di Kartu Keluarga')->required(),
+                    Select::make('status_kawin')->options(StatusKawin::all()->pluck('nama', 'kode'))->label('Status Perkawinan')->required(),
                     TextInput::make('alamat')->label('Alamat Lengkap')->extraInputAttributes(['onChange' => 'this.value = this.value.toUpperCase()'])->dehydrateStateUsing(fn($state) => strtoupper($state)),
                     Select::make('kode_kecamatan')->options(KodeKecamatan::all()->pluck('nama_kecamatan', 'kode_kecamatan'))->searchable()->label('Nama Kecamatan'),
                     Select::make('nama_bank')->options(KodeBank::all()->pluck('nama_bank', 'kode_bank'))->searchable()->preload()->label('Nama Bank yang Digunakan')
