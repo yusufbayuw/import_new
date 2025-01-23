@@ -130,9 +130,11 @@ class MutasiPesertaBaruResource extends Resource
                             ))
                         );
                     }
-                ),
-                TextColumn::make('produk_yg_dipilih')->sortable(),
-                TextColumn::make('kelas_rawat')->sortable(),
+                )->label("NO URUT*"),
+                TextColumn::make('kelas_rawat')->sortable()
+                    ->label("KELAS RAWAT"),
+                TextColumn::make('produk_yg_dipilih')->sortable()
+                    ->label('PRODUK YG DIPILIH'),
                 TextColumn::make('no_peg')->searchable()->sortable(),
                 TextColumn::make('sub_group'),
                 TextColumn::make('nama_subgroup'),
