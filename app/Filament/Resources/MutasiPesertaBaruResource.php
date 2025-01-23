@@ -98,7 +98,7 @@ class MutasiPesertaBaruResource extends Resource
                             Select::make('kode_kecamatan')->options(KodeKecamatan::all()->pluck('nama_kecamatan', 'kode_kecamatan'))->searchable()->label('Nama Kecamatan'),
                             Select::make('nama_bank')->options(KodeBank::all()->pluck('nama_bank', 'kode_bank'))->searchable()->preload()->label('Nama Bank yang Digunakan')
                                 ->reactive()
-                                ->afterStateUpdated(fn (Closure $set, $state) => $set('kode_bank', KodeBank::where('nama', $state)->first()->kode ?? null )),
+                                ->afterStateUpdated(fn (Closure $set, $state) => $set('kode_bank', KodeBank::where('nama_bank', $state)->first()->kode_bank ?? null )),
                             Hidden::make('kode_bank'),
                             TextInput::make('no_rek')->numeric()->label('Nomor Rekening Bank'),
                             TextInput::make('nama_pemilik_rekening')->label('Nama Pemilik Rekening')->extraInputAttributes(['onChange' => 'this.value = this.value.toUpperCase()'])->dehydrateStateUsing(fn ($state) => strtoupper($state)),
