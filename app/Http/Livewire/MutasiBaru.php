@@ -46,9 +46,17 @@ class MutasiBaru extends Component implements HasForms
                     TextInput::make('nomor_induk_kependudukan')->label('Nomor Induk Kependudukan (NIK)')->numeric()->length(16)->required(),
                     TextInput::make('no_peg')->label('Nomor Induk Pegawai (NIP)')
                         ->required()
-                        ->unique(callback: function ($state) {
-                            return (Pegawai::where('nip', $state)->first()->is_tetap ?? 0);
-                        }),
+                        ->rules([
+                            function () {
+                                return function (string $attribute, $value, Closure $fail) {
+                                    if (!(Pegawai::where('nip', $value)->first()->is_tetap ?? 0)) {
+                                        if (MutasiPesertaBaru::where('no_peg',$value)->exists()) {
+                                            $fail('Kuota Inhealth untuk :attribute terbatas 1 orang.');
+                                        }
+                                    }
+                                };
+                            },
+                        ]),
                     Select::make('jabatan')->options(Jabatan::all()->pluck('nama', 'kode'))->searchable()->label('Jabatan')->preload(),
                     TextInput::make('no_telepon')->label('Nomor Telepon')->numeric()->required(),
                     Hidden::make('sub_group')->default(''),
