@@ -2,49 +2,42 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Resources\PegawaiResource\Pages;
+use App\Filament\Resources\PegawaiResource\RelationManagers;
+use App\Models\Pegawai;
 use Filament\Forms;
-use Filament\Tables;
 use Filament\Resources\Form;
-use Filament\Resources\Table;
 use Filament\Resources\Resource;
-use Illuminate\Pagination\Paginator;
+use Filament\Resources\Table;
+use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
-use App\Filament\Resources\JabatanResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\JabatanResource\RelationManagers;
-use App\Models\Jabatan;
 
-class JabatanResource extends Resource
+class PegawaiResource extends Resource
 {
-    protected static ?string $model = Jabatan::class;
+    protected static ?string $model = Pegawai::class;
 
     protected static ?int $navigationSort = 10;
 
-    protected static ?string $modelLabel = 'Data Jabatan';
+    protected static ?string $modelLabel = 'Data Keluarga';
 
-    protected static ?string $navigationIcon = 'heroicon-o-flag';
+    protected static ?string $navigationIcon = 'heroicon-o-user-circle';
 
-    protected static ?string $slug = 'jabatan';
+    protected static ?string $slug = 'pisa';
 
-    protected static ?string $navigationLabel = 'Data Jabatan';
+    protected static ?string $navigationLabel = 'Data Keluarga';
 
     protected static ?string $navigationGroup = 'Data List';
-    
-    protected function paginateTableQuery(Builder $query): Paginator
-    {
-        return $query->fastPaginate($this->getTableRecordsPerPage());
-    }
-    
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('kode')
-                    ->required()
+                Forms\Components\TextInput::make('nip')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('nama')
-                    ->required()
                     ->maxLength(255),
+                Forms\Components\Toggle::make('is_tetap'),
             ]);
     }
 
@@ -52,30 +45,39 @@ class JabatanResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('kode'),
+                Tables\Columns\TextColumn::make('nip'),
                 Tables\Columns\TextColumn::make('nama'),
+                Tables\Columns\IconColumn::make('is_tetap')
+                    ->boolean(),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()->toggleable(isToggledHiddenByDefault: true)->sortable(),
+                    ->dateTime(),
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()->toggleable(isToggledHiddenByDefault: true)->sortable(),
+                    ->dateTime(),
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
     
+    public static function getRelations(): array
+    {
+        return [
+            //
+        ];
+    }
+    
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageJabatans::route('/'),
+            'index' => Pages\ListPegawais::route('/'),
+            'create' => Pages\CreatePegawai::route('/create'),
+            'edit' => Pages\EditPegawai::route('/{record}/edit'),
         ];
     }    
 }
