@@ -74,7 +74,7 @@ class MutasiBaru extends Component implements HasForms
                     Select::make('nama_bank')->options(KodeBank::all()->pluck('nama_bank', 'nama_bank'))->searchable()->preload()->label('Nama Bank yang Digunakan')
                         ->reactive()
                         ->required()
-                        ->afterStateUpdated(fn(Closure $set, $state) => $state ? $set('kode_bank', KodeBank::where('nama_bank', $state)->first()->kode_bank ?? null) : null),
+                        ->afterStateUpdated(fn(Closure $set, $state) => $state ? $set('kode_bank', KodeBank::where('nama_bank', $state)->first()->kode_bank ?? null) : $set('kode_bank', null)),
                     Hidden::make('kode_bank'),
                     TextInput::make('no_rek')->numeric()->label('Nomor Rekening Bank')->required(),
                     TextInput::make('nama_pemilik_rekening')->label('Nama Pemilik Rekening')->extraInputAttributes(['onChange' => 'this.value = this.value.toUpperCase()'])->dehydrateStateUsing(fn($state) => strtoupper($state))->required(),
@@ -90,6 +90,8 @@ class MutasiBaru extends Component implements HasForms
                         ->afterStateUpdated(function (Closure $set, $state) {
                             if ($state) {
                                 $set('nama_dokter', ProviderInhealth::where('kode_provider', $state)->get('nama_provider')[0]->nama_provider);
+                            } else {
+                                $set('nama_dokter', null);
                             }
                         })->reactive()
                         ->label('Tentukan Fasilitas Kesehatan Inhealth')
@@ -112,7 +114,11 @@ class MutasiBaru extends Component implements HasForms
                         ->getSearchResultsUsing(fn(string $search) => ProviderBPJS::where('address_virt', 'like', "%{$search}%")->limit(100)->pluck('address_virt', 'kode_ppk_bpjs'))
                         ->getOptionLabelUsing(fn($value): ?string => ProviderBPJS::where('kode_ppk_bpjs', $value)->get('nama_ppk_bpjs')->nama_ppk_bpjs)
                         ->afterStateUpdated(function (Closure $set, $state) {
-                            $set('nama_fakes', ProviderBPJS::where('kode_ppk_bpjs', $state)->get('nama_ppk_bpjs')[0]->nama_ppk_bpjs);
+                            if ($state) {
+                                $set('nama_fakes', ProviderBPJS::where('kode_ppk_bpjs', $state)->get('nama_ppk_bpjs')[0]->nama_ppk_bpjs);
+                            } else {
+                                $set('nama_fakes', null);
+                            }
                         })
                         ->reactive()
                         ->label('Fasilitas Kesehatan BPJS')
