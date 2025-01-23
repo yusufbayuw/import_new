@@ -205,7 +205,6 @@ class MutasiPesertaBaruResource extends Resource
                 TextColumn::make('tgl_efektif_bpjs')
                     ->sortable()
                     ->label('TGL EFEKTIF'),
-                TextColumn::make('no_telepon'),
                 TextColumn::make('nomor_induk_kependudukan')
                     ->sortable()
                     ->label('NIK *'),
