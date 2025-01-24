@@ -166,6 +166,8 @@ class MutasiPesertaBaruResource extends Resource
                 TextColumn::make('produk_yg_dipilih')->sortable()
                     ->label('PRODUK YG DIPILIH'),
                 TextColumn::make('no_peg')
+                    ->copyable()
+                    ->copyMessage("NIP disalin 👍")
                     ->searchable()
                     ->sortable()
                     ->label('NO PEG *'),

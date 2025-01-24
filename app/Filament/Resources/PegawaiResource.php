@@ -34,10 +34,13 @@ class PegawaiResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('nip')
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->label('NIP'),
                 Forms\Components\TextInput::make('nama')
+                    ->label('NAMA')
                     ->maxLength(255),
-                Forms\Components\Toggle::make('is_tetap'),
+                Forms\Components\Toggle::make('is_tetap')
+                    ->label('TETAP'),
             ]);
     }
 
@@ -49,7 +52,8 @@ class PegawaiResource extends Resource
                 Tables\Columns\TextColumn::make('nama')->label('Pegawai'),
                 Tables\Columns\IconColumn::make('is_tetap')->label('Tetap?')
                     ->boolean(),
-                Tables\Columns\TextColumn::make('mutasi_count')->counts('mutasi')->sortable(),
+                Tables\Columns\TextColumn::make('mutasi_count')->counts('mutasi')->sortable()
+                    ->label('MUTASI'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime(),
                 Tables\Columns\TextColumn::make('updated_at')
