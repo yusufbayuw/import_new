@@ -2,17 +2,19 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\PegawaiResource\Pages;
-use App\Filament\Resources\PegawaiResource\RelationManagers;
-use App\Models\Pegawai;
+use Closure;
 use Filament\Forms;
-use Filament\Resources\Form;
-use Filament\Resources\Resource;
-use Filament\Resources\Table;
 use Filament\Tables;
+use App\Models\Pegawai;
+use Filament\Resources\Form;
+use Filament\Resources\Table;
+use Filament\Resources\Resource;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\PegawaiResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\PegawaiResource\RelationManagers;
 
 class PegawaiResource extends Resource
 {
@@ -114,4 +116,16 @@ class PegawaiResource extends Resource
         ];
     }
     
+    protected function getTableRecordClassesUsing(): ?Closure
+    {
+        return function (Model $record) {
+            if ($record->mutasi_count > 4) {
+                return 'border-l-2 border-yellow-600'; // warna warning
+            } elseif ($record->mutasi_count == 0) {
+                return 'border-l-2 border-red-600'; // warna danger
+            } else {
+                return null;
+            }
+        };
+    }
 }
