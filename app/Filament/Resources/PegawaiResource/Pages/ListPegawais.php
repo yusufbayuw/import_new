@@ -38,13 +38,12 @@ class ListPegawais extends ListRecords
     {
         return function (Pegawai $record) {
             if ($record->mutasi_count > 4) {
-                return 'border-l-2 border-orange-600'; // warna warning
+                return 'border-l-2 border-orange-600 bg-orange-100'; // warna warning (border dan background)
             } elseif ($record->mutasi_count == 0) {
-                return 'border-l-2 border-red-600'; // warna danger
+                return 'border-l-2 border-red-600 bg-red-100'; // warna danger (border dan background)
             } else {
-                return null;
+                return 'bg-gray-100'; // warna default untuk kondisi lainnya
             }
         };
     }
-
 }

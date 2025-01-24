@@ -6,6 +6,8 @@ use Filament\Widgets\Widget;
 
 class PegawaiOverview extends Widget
 {
+    protected int | string | array $columnSpan = 'full';
+    
     protected static string $view = 'filament.resources.pegawai-resource.widgets.pegawai-overview';
 
     public $rekap;
