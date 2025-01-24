@@ -38,7 +38,7 @@ class ListPegawais extends ListRecords
     {
         return function (Pegawai $record) {
             if ($record->mutasi_count > 4) {
-                return 'border-l-2 border-yellow-600'; // warna warning
+                return 'border-l-2 border-orange-600'; // warna warning
             } elseif ($record->mutasi_count == 0) {
                 return 'border-l-2 border-red-600'; // warna danger
             } else {
