@@ -120,11 +120,11 @@ class PegawaiResource extends Resource
     {
         return function (Pegawai $record) {
             if ($record->mutasi_count > 4) {
-                return 'border-l-2 border-orange-600 bg-orange-100'; // warna warning (border dan background)
+                return 'border-l-2 border-r-0 border-t-0 border-b-0 border-orange-600 bg-orange-100'; // warna warning (border dan background)
             } elseif ($record->mutasi_count == 0) {
-                return 'border-l-2 border-red-600 bg-red-100'; // warna danger (border dan background)
+                return 'border-l-2  border-r-0 border-t-0 border-b-0 border-red-600 bg-red-100'; // warna danger (border dan background)
             } else {
-                return 'bg-gray-100'; // warna default untuk kondisi lainnya
+                return null; // warna default untuk kondisi lainnya
             }
         };
     }
