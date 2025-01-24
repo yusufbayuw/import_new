@@ -118,7 +118,7 @@ class PegawaiResource extends Resource
     
     protected function getTableRecordClassesUsing(): ?Closure
     {
-        return function (Model $record) {
+        return function (Pegawai $record) {
             if ($record->mutasi_count > 4) {
                 return 'border-l-2 border-yellow-600'; // warna warning
             } elseif ($record->mutasi_count == 0) {

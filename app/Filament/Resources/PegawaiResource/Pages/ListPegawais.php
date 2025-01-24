@@ -7,6 +7,7 @@ use Filament\Pages\Actions;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Resources\Pages\ListRecords;
 use App\Filament\Resources\PegawaiResource;
+use App\Models\Pegawai;
 use Konnco\FilamentImport\Actions\ImportField;
 use Konnco\FilamentImport\Actions\ImportAction;
 
@@ -35,7 +36,7 @@ class ListPegawais extends ListRecords
 
     protected function getTableRecordClassesUsing(): ?Closure
     {
-        return function (Model $record) {
+        return function (Pegawai $record) {
             if ($record->mutasi_count > 4) {
                 return 'border-l-2 border-yellow-600'; // warna warning
             } elseif ($record->mutasi_count == 0) {
