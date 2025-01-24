@@ -45,11 +45,11 @@ class PegawaiResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('nip'),
-                Tables\Columns\TextColumn::make('nama'),
-                Tables\Columns\IconColumn::make('is_tetap')
+                Tables\Columns\TextColumn::make('nip')->label('NIP'),
+                Tables\Columns\TextColumn::make('nama')->label('Pegawai'),
+                Tables\Columns\IconColumn::make('is_tetap')->label('Tetap?')
                     ->boolean(),
-                Tables\Columns\TextColumn::make('mutasi_count')->counts('mutasi'),
+                Tables\Columns\TextColumn::make('mutasi_count')->counts('mutasi')->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime(),
                 Tables\Columns\TextColumn::make('updated_at')
