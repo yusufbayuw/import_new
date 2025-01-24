@@ -102,7 +102,7 @@ class MutasiPesertaBaruResource extends Resource
                 Section::make('InHealth')
                     ->schema([
                         Select::make('produk_yg_dipilih')->options(Produk::all()->pluck('nama', 'kode'))->label('Produk Inhealth')->required(),
-                        Select::make('kelas_rawat')->options(KelasRawat::all()->pluck('nama', 'kode'))->default('3')->disabled()->label('Kelas Rawat Inap Inhealth'),
+                        Select::make('kelas_rawat')->options(KelasRawat::all()->pluck('nama', 'kode'))->label('Kelas Rawat Inap Inhealth'),
                         Select::make('kode_dokter')
                             ->searchable()
                             ->options(ProviderInhealth::all()->pluck('address_virt', 'kode_provider'))
