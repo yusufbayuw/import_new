@@ -49,7 +49,7 @@ class PegawaiResource extends Resource
                 Tables\Columns\TextColumn::make('nama'),
                 Tables\Columns\IconColumn::make('is_tetap')
                     ->boolean(),
-                Tables\Columns\TextColumn::make('mengisi')->counts('mutasi'),
+                Tables\Columns\TextColumn::make('mutasi_count')->counts('mutasi'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime(),
                 Tables\Columns\TextColumn::make('updated_at')
