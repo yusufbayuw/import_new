@@ -105,7 +105,7 @@ class MutasiBaru extends Component implements HasForms
                         ->required(),
                     TextInput::make('nama_dokter')->disabled()->extraInputAttributes(['onChange' => 'this.value = this.value.toUpperCase()'])->dehydrateStateUsing(fn($state) => strtoupper($state))->label('Nama Fakes Dipilih'),
                 ]),
-            Section::make('BPJS')
+            Section::make('DATA BPJS EXISTING')
                 ->schema([
                     TextInput::make('nomor_kartu')->numeric()->label('Nomor Kartu BPJS')->required(),
                     Select::make('kelas_rawat_bpjs')->options([
