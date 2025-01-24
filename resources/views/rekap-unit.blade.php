@@ -24,14 +24,12 @@
             padding: 8px;
             text-align: center;
         }
-        tbody tr:hover {
-            background-color: #ffffff;
-        
+
         .bg-red {
-            background-color: #f8d7da;
+            background-color: #ff747f;
         }
         .bg-yellow {
-            background-color: #fff3cd;
+            background-color: #ffc400;
         }
         .bg-green {
             background-color: #ffffff;
@@ -41,39 +39,6 @@
 </head>
 <body>
     <div class="container">
-        <h1 style="text-align: center; margin-bottom: 20px;">Rekapitulasi Pegawai Berdasarkan Unit</h1>
-
-        <!-- Tabel Rekap Pegawai -->
-        <table>
-            <thead>
-                <tr>
-                    <th>Unit</th>
-                    <th>ID</th>
-                    <th>NIP</th>
-                    <th>Nama</th>
-                    <th>Jumlah Mutasi</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($rekap as $unit => $pegawai)
-                    @foreach ($pegawai as $item)
-                        <tr class="
-                            @if ($item['mutasi_count'] == 0) bg-red
-                            @elseif ($item['mutasi_count'] > 4) bg-yellow
-                            @else bg-green
-                            @endif">
-                            <td>{{ $unit }}</td>
-                            <td>{{ $item['id'] }}</td>
-                            <td>{{ $item['nip'] }}</td>
-                            <td>{{ $item['nama'] }}</td>
-                            <td>{{ $item['mutasi_count'] }}</td>
-                            <td>{{ $item['is_tetap'] ? 'Tetap' : 'Kontrak' }}</td>
-                        </tr>
-                    @endforeach
-                @endforeach
-            </tbody>
-        </table>
 
         <!-- Tabel Rekap Unit -->
         <h2 style="text-align: center; margin-top: 40px;">Rekapitulasi Unit</h2>
@@ -102,6 +67,38 @@
                         <td>{{ $sudahMengisi }}</td>
                         <td>{{ $belumMengisi }}</td>
                     </tr>
+                @endforeach
+            </tbody>
+        </table>
+
+        <h1 style="text-align: center; margin-bottom: 20px;">Rekapitulasi Pegawai Berdasarkan Unit</h1>
+
+        <!-- Tabel Rekap Pegawai -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Unit</th>
+                    <th>NIP</th>
+                    <th>Nama</th>
+                    <th>Jumlah Mutasi</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($rekap as $unit => $pegawai)
+                    @foreach ($pegawai as $item)
+                        <tr class="
+                            @if ($item['mutasi_count'] == 0) bg-red
+                            @elseif ($item['mutasi_count'] > 4) bg-yellow
+                            @else bg-green
+                            @endif">
+                            <td>{{ $unit }}</td>
+                            <td>{{ $item['nip'] }}</td>
+                            <td>{{ $item['nama'] }}</td>
+                            <td>{{ $item['mutasi_count'] }}</td>
+                            <td>{{ $item['is_tetap'] ? 'Tetap' : 'Kontrak' }}</td>
+                        </tr>
+                    @endforeach
                 @endforeach
             </tbody>
         </table>
