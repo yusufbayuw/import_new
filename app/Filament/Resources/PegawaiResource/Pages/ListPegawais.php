@@ -35,14 +35,15 @@ class ListPegawais extends ListRecords
 
     protected function getTableRecordClassesUsing(): ?Closure
     {
-        return fn(Model $record) => match ($record->status) {
-            'draft' => 'opacity-30',
-            'reviewing' => [
-                'border-l-2 border-orange-600',
-                'dark:border-orange-300' => config('tables.dark_mode'),
-            ],
-            'published' => 'border-l-2 border-green-600',
-            default => null,
+        return function (Model $record) {
+            if ($record->mutasi_count > 4) {
+                return 'border-l-2 border-yellow-600'; // warna warning
+            } elseif ($record->mutasi_count == 0) {
+                return 'border-l-2 border-red-600'; // warna danger
+            } else {
+                return null;
+            }
         };
     }
+
 }

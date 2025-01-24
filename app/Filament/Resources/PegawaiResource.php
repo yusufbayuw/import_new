@@ -113,4 +113,5 @@ class PegawaiResource extends Resource
             'edit' => Pages\EditPegawai::route('/{record}/edit'),
         ];
     }
+    
 }
