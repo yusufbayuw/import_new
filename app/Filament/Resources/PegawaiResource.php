@@ -10,6 +10,7 @@ use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -63,16 +64,8 @@ class PegawaiResource extends Resource
                     ->copyable()
                     ->copyMessage("NIP disalin 👍")
                     ->searchable(),
-                Tables\Columns\SelectColumn::make('unit')
-                    ->label('UNIT')
-                    ->options([
-                        "TK" => "TK",
-                        "SD" => "SD",
-                        "SMP" => "SMP",
-                        "SMA" => "SMA",
-                        "TBU" => "TBU",
-                        "ADM" => "ADM",
-                    ]),
+                Tables\Columns\TextColumn::make('unit')
+                    ->label('UNIT'),
                 Tables\Columns\TextColumn::make('nama')
                     ->label('Pegawai')
                     ->searchable(),
@@ -86,7 +79,16 @@ class PegawaiResource extends Resource
                     ->dateTime(),
             ])
             ->filters([
-                //
+                SelectFilter::make('unit')
+                    ->label('UNIT')
+                    ->options([
+                        "TK" => "TK",
+                        "SD" => "SD",
+                        "SMP" => "SMP",
+                        "SMA" => "SMA",
+                        "TBU" => "TBU",
+                        "ADM" => "ADM",
+                    ]),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
