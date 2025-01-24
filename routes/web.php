@@ -1,6 +1,6 @@
 <?php
 
-
+use App\Http\Controllers\PegawaiController;
 use App\Http\Livewire\MutasiBaru;
 use App\Http\Livewire\LandingPage;
 use Illuminate\Support\Facades\Route;
@@ -18,3 +18,4 @@ use Illuminate\Support\Facades\Route;
  
 Route::get('/', LandingPage::class);
 Route::get('/mutasibaru', MutasiBaru::class);
+Route::get('/admin/pegawai/rekap-unit', [PegawaiController::class, 'rekapUnit']);
