@@ -39,6 +39,16 @@ class PegawaiResource extends Resource
                 Forms\Components\TextInput::make('nama')
                     ->label('NAMA')
                     ->maxLength(255),
+                Forms\Components\Select::make('unit')
+                    ->label('UNIT')
+                    ->options([
+                        "TK" => "TK",
+                        "SD" => "SD",
+                        "SMP" => "SMP",
+                        "SMA" => "SMA",
+                        "TBU" => "TBU",
+                        "ADM" => "ADM",
+                    ]),
                 Forms\Components\Toggle::make('is_tetap')
                     ->label('TETAP'),
             ]);
@@ -53,6 +63,16 @@ class PegawaiResource extends Resource
                     ->copyable()
                     ->copyMessage("NIP disalin 👍")
                     ->searchable(),
+                Tables\Columns\SelectColumn::make('unit')
+                    ->label('UNIT')
+                    ->options([
+                        "TK" => "TK",
+                        "SD" => "SD",
+                        "SMP" => "SMP",
+                        "SMA" => "SMA",
+                        "TBU" => "TBU",
+                        "ADM" => "ADM",
+                    ]),
                 Tables\Columns\TextColumn::make('nama')
                     ->label('Pegawai')
                     ->searchable(),
@@ -75,14 +95,14 @@ class PegawaiResource extends Resource
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
-    
+
     public static function getRelations(): array
     {
         return [
             //
         ];
     }
-    
+
     public static function getPages(): array
     {
         return [
@@ -90,5 +110,5 @@ class PegawaiResource extends Resource
             'create' => Pages\CreatePegawai::route('/create'),
             'edit' => Pages\EditPegawai::route('/{record}/edit'),
         ];
-    }    
+    }
 }
