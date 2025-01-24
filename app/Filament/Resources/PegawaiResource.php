@@ -48,8 +48,14 @@ class PegawaiResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('nip')->label('NIP'),
-                Tables\Columns\TextColumn::make('nama')->label('Pegawai'),
+                Tables\Columns\TextColumn::make('nip')
+                    ->label('NIP')
+                    ->copyable()
+                    ->copyMessage("NIP disalin 👍")
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('nama')
+                    ->label('Pegawai')
+                    ->searchable(),
                 Tables\Columns\IconColumn::make('is_tetap')->label('Tetap?')
                     ->boolean(),
                 Tables\Columns\TextColumn::make('mutasi_count')->counts('mutasi')->sortable()
