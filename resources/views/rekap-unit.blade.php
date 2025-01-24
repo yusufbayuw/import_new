@@ -25,8 +25,8 @@
             text-align: center;
         }
         tbody tr:hover {
-            background-color: #e9ecef;
-        }
+            background-color: #ffffff;
+        
         .bg-red {
             background-color: #f8d7da;
         }
@@ -34,13 +34,16 @@
             background-color: #fff3cd;
         }
         .bg-green {
-            background-color: #d4edda;
+            background-color: #ffffff;
+        }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1 style="text-align: center; margin-bottom: 20px;">Rekapitulasi Pegawai Berdasarkan Unit</h1>
+
+        <!-- Tabel Rekap Pegawai -->
         <table>
             <thead>
                 <tr>
@@ -68,6 +71,37 @@
                             <td>{{ $item['is_tetap'] ? 'Tetap' : 'Kontrak' }}</td>
                         </tr>
                     @endforeach
+                @endforeach
+            </tbody>
+        </table>
+
+        <!-- Tabel Rekap Unit -->
+        <h2 style="text-align: center; margin-top: 40px;">Rekapitulasi Unit</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Unit</th>
+                    <th>Total Pegawai</th>
+                    <th>Sudah Mengisi</th>
+                    <th>Belum Mengisi</th>
+                </tr>
+            </thead>
+            <tbody>
+                @php
+                    $units = ['TK', 'SD', 'SMP', 'SMA', 'TBU', 'ADM'];
+                @endphp
+                @foreach ($units as $unit)
+                    @php
+                        $totalPegawai = $rekap[$unit]->count() ?? 0;
+                        $sudahMengisi = $rekap[$unit]->filter(fn($p) => $p['mutasi_count'] > 0)->count() ?? 0;
+                        $belumMengisi = $totalPegawai - $sudahMengisi;
+                    @endphp
+                    <tr>
+                        <td>{{ $unit }}</td>
+                        <td>{{ $totalPegawai }}</td>
+                        <td>{{ $sudahMengisi }}</td>
+                        <td>{{ $belumMengisi }}</td>
+                    </tr>
                 @endforeach
             </tbody>
         </table>
