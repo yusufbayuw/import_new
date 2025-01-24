@@ -114,6 +114,7 @@ class MutasiBaru extends Component implements HasForms
                         "3" => "Kelas 3"
                     ])
                     ->default("1")
+                    ->disabled()
                     ->required(),
                     Hidden::make('tgl_efektif_bpjs'),
                     Hidden::make('tmt')->default(date('01/m/Y', strtotime('+1 month'))),
