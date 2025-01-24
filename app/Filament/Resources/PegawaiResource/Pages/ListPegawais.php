@@ -2,7 +2,9 @@
 
 namespace App\Filament\Resources\PegawaiResource\Pages;
 
+use Closure;
 use Filament\Pages\Actions;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Resources\Pages\ListRecords;
 use App\Filament\Resources\PegawaiResource;
 use Konnco\FilamentImport\Actions\ImportField;
@@ -29,5 +31,18 @@ class ListPegawais extends ListRecords
         return [
             PegawaiResource\Widgets\PegawaiOverview::class,
         ];
+    }
+
+    protected function getTableRecordClassesUsing(): ?Closure
+    {
+        return fn(Model $record) => match ($record->status) {
+            'draft' => 'opacity-30',
+            'reviewing' => [
+                'border-l-2 border-orange-600',
+                'dark:border-orange-300' => config('tables.dark_mode'),
+            ],
+            'published' => 'border-l-2 border-green-600',
+            default => null,
+        };
     }
 }
