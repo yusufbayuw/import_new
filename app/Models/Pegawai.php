@@ -14,6 +14,6 @@ class Pegawai extends Model
 
     public function mutasi(): HasMany
     {
-        return $this->hasMany(MutasiPesertaBaru::class, 'no_peg');
+        return $this->hasMany(MutasiPesertaBaru::class, 'no_peg', 'nip');
     }
 }
