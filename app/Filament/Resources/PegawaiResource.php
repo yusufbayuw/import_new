@@ -103,7 +103,7 @@ class PegawaiResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\MutasiRelationManager::class,
         ];
     }
 
