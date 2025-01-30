@@ -46,6 +46,7 @@ class MutasiBaru extends Component implements HasForms
                     TextInput::make('nomor_induk_kependudukan')->label('Nomor Induk Kependudukan (NIK)')->numeric()->length(16)->required(),
                     TextInput::make('no_peg')->label('Nomor Induk Pegawai (NIP)')
                         ->required()
+                        ->helperText('isi dengan NIP Pegawai YTB')
                         ->rules([
                             function () {
                                 return function (string $attribute, $value, Closure $fail) {
@@ -67,7 +68,11 @@ class MutasiBaru extends Component implements HasForms
                 ]),
             Section::make('Status')
                 ->schema([
-                    Select::make('pisa')->options(Pisa::all()->pluck('nama', 'kode'))->label('Status di Kartu Keluarga')->required(),
+                    Select::make('pisa')
+                        ->options(Pisa::all()->pluck('nama', 'kode'))
+                        ->label('Status di Kartu Keluarga')
+                        ->required()
+                        ->helperText('Pegawai pilih PEGAWAI. Keluarga menyesuaikan (suami, istri, anak)'),
                     Select::make('status_kawin')->options(StatusKawin::all()->pluck('nama', 'kode'))->label('Status Perkawinan')->required(),
                     TextInput::make('alamat')->label('Alamat Lengkap')->extraInputAttributes(['onChange' => 'this.value = this.value.toUpperCase()'])->dehydrateStateUsing(fn($state) => strtoupper($state))->required(),
                     Select::make('kode_kecamatan')->options(KodeKecamatan::all()->pluck('nama_kecamatan', 'kode_kecamatan'))->searchable()->label('Nama Kecamatan')->required(),
@@ -87,7 +92,11 @@ class MutasiBaru extends Component implements HasForms
                 ]),
             Section::make('InHealth')
                 ->schema([
-                    Select::make('produk_yg_dipilih')->options(Produk::all()->pluck('nama', 'kode'))->label('Produk Inhealth')->required(),
+                    Select::make('produk_yg_dipilih')
+                        ->options(Produk::all()->pluck('nama', 'kode'))
+                        ->label('Produk Inhealth')
+                        ->required()
+                        ->helperText('Silver: Pegawai Tetap. Blue: Pegawai Kontrak, Keluarga Pegawai Tetap'),
                     Select::make('kelas_rawat')->options(KelasRawat::all()->pluck('nama', 'kode'))->default('3')->disabled()->label('Kelas Rawat Inap Inhealth'),
                     Select::make('kode_dokter')
                         ->searchable()
@@ -131,7 +140,7 @@ class MutasiBaru extends Component implements HasForms
                         })
                         ->reactive()
                         ->label('Fasilitas Kesehatan BPJS')
-                        ->helperText('Ketik untuk mencari, kemudian pilih.')
+                        ->helperText('Ketik untuk mencari, kemudian pilih. Jika tidak ada cari 000')
                         ->required(),
                     TextInput::make('nama_fakes')->disabled()->extraInputAttributes(['onChange' => 'this.value = this.value.toUpperCase()'])->dehydrateStateUsing(fn($state) => strtoupper($state))->label('Nama Fasilitas Kesehatan BPJS'),
                 ]),
