@@ -161,6 +161,8 @@ class MutasiPesertaBaruResource extends Resource
                         );
                     }
                 )->label("NO URUT *"),
+                TextColumn::make('pegawai.unit')->sortable()
+                    ->label("UNIT"),
                 TextColumn::make('kelas_rawat')->sortable()
                     ->label("KELAS RAWAT"),
                 TextColumn::make('produk_yg_dipilih')->sortable()
